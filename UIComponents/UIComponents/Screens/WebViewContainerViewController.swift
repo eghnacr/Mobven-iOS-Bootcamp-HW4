@@ -65,14 +65,19 @@ class WebViewContainerViewController: UIViewController {
     }
     
     @IBAction func openInSafariButtonTapped(_ sender: UIBarButtonItem) {
+        if let url = webView.url {
+            UIApplication.shared.open(url)
+        }
     }
     
     
     @IBAction func goBackwardButtonTapped(_ sender: UIBarButtonItem) {
+        webView.goBack()
     }
     
     
-    @IBAction func goForwardButtonTapped(_ sender: Any) {
+    @IBAction func goForwardButtonTapped(_ sender: UIBarButtonItem) {
+        webView.goForward()
     }
     
 }
