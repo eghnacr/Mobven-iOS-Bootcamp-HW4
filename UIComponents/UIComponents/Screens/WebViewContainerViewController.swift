@@ -63,6 +63,18 @@ class WebViewContainerViewController: UIViewController {
     @IBAction func reloadButtonTapped(_ sender: UIBarButtonItem) {
         webView.reload()
     }
+    
+    @IBAction func openInSafariButtonTapped(_ sender: UIBarButtonItem) {
+    }
+    
+    
+    @IBAction func goBackwardButtonTapped(_ sender: UIBarButtonItem) {
+    }
+    
+    
+    @IBAction func goForwardButtonTapped(_ sender: Any) {
+    }
+    
 }
 
 extension WebViewContainerViewController: WKNavigationDelegate {
