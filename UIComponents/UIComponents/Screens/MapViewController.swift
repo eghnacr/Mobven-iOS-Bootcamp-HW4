@@ -16,6 +16,11 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         checkLocationPermission()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil)
         addLongGestureRecognizer()
     }
 
@@ -42,12 +47,17 @@ class MapViewController: UIViewController {
         case .denied, .restricted:
             //popup gosterecegiz. go to settings butonuna basildiginda
             //kullaniciyi uygulamamizin settings sayfasina gonder
-            break
+            showLocationPermissionDeniedAlert()
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         @unknown default:
             fatalError()
         }
+    }
+
+    @objc private func didBecomeActive() {
+        //Check again after returning from the settings
+        checkLocationPermission()
     }
 
     @IBAction func showCurrentLocationTapped(_ sender: UIButton) {
@@ -81,4 +91,26 @@ extension MapViewController: CLLocationManagerDelegate {
 
 extension MapViewController: MKMapViewDelegate {
 
+}
+
+extension MapViewController {
+    func showLocationPermissionDeniedAlert() {
+        let alert = UIAlertController(
+            title: "Konuma Erişilemedi",
+            message: "Lütfen ayarladan konum izni verin.",
+            preferredStyle: .alert
+        )
+        let cancel = UIAlertAction(title: "İptal", style: .cancel) { action in
+            self.navigationController?.popViewController(animated: true)
+        }
+
+        let settings = UIAlertAction(title: "Ayarlar", style: .default) { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+            }
+        }
+        alert.addAction(cancel)
+        alert.addAction(settings)
+        present(alert, animated: true, completion: nil)
+    }
 }
