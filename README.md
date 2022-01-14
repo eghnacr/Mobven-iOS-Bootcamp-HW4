@@ -1,5 +1,7 @@
 # HW4
 
+## ⚠️ Kolay incelenmesi açısından yaptıklarımı pull request olarak açıp bıraktım. ⚠️
+
 ## Ödev 1: 
 Bu hafta geliştirdiğimiz projedeki webView ekranında 
 - toolBar’a goForward, goBackward ve open in safari butonları ve özellikleri eklenecektir.
