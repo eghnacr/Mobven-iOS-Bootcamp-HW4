@@ -32,6 +32,7 @@ class WebViewContainerViewController: UIViewController {
 
         let configuration = WKWebViewConfiguration()
         configuration.preferences = preferences
+        configuration.defaultWebpagePreferences.allowsContentJavaScript = true
 //        webView.configuration = configuration
         webView.uiDelegate = self
         webView.navigationDelegate = self
@@ -40,7 +41,8 @@ class WebViewContainerViewController: UIViewController {
                             forKeyPath: #keyPath(WKWebView.isLoading),
                             options: .new,
                             context: nil)
-        webView.load(urlRequest)
+        //webView.load(urlRequest)
+        loadHtml()
     }
 
     func configureActivityIndicator() {
@@ -63,6 +65,45 @@ class WebViewContainerViewController: UIViewController {
     @IBAction func reloadButtonTapped(_ sender: UIBarButtonItem) {
         webView.reload()
     }
+    
+    @IBAction func openInSafariButtonTapped(_ sender: UIBarButtonItem) {
+        if let url = webView.url {
+            UIApplication.shared.open(url)
+        }
+    }
+    
+    
+    @IBAction func goBackwardButtonTapped(_ sender: UIBarButtonItem) {
+        webView.goBack()
+    }
+    
+    
+    @IBAction func goForwardButtonTapped(_ sender: UIBarButtonItem) {
+        webView.goForward()
+    }
+
+    func loadHtml() {
+        let html =
+            """
+            <!DOCTYPE html>
+            <html>
+                <body>
+                    <h1">HTML Links</h1>
+                    <p id="plink"><a href="https://www.google.com/">Visit google.com!</a></p>
+                </body>
+            </html>
+            """
+        let js =
+            """
+            document.getElementById("plink").style.fontFamily = "Impact,Charcoal,sans-serif";
+            """
+        webView.loadHTMLString(html, baseURL: nil)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.webView.evaluateJavaScript(js, completionHandler: nil)
+        }
+    }
+
 }
 
 extension WebViewContainerViewController: WKNavigationDelegate {
